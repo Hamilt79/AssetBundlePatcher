@@ -2,6 +2,7 @@
 
 Small application made with [Avalonia UI](https://github.com/avaloniaui/avalonia).
 It is very Barren because it was originally made as a tool to help me debug a specific Unity game, but I don't want people to use it that way so it is heavily reduced and has limited features.
+If anyone decides to dig through this mess, I am very sorry for the lack of comments. I made this before I had a brain. :)
 
 # Features
 
