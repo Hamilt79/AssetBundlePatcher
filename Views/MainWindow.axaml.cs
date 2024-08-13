@@ -50,12 +50,14 @@ namespace AssetBundlePatcher.Views
                 Console.WriteLine(files.Result[0].Path.AbsolutePath);
                 //"file:///"
                 ((MainWindowViewModel)this.DataContext).SceneEditorStart(files.Result[0].Path.ToString().Substring(8));
+                EditSceneEditorPath(files.Result[0].Path.ToString().Substring(8));
+                SceneEditorButtonClick(null, null);
             }
         }
 
         public void EditSceneEditorPath(string sceneEditorPath)
         {
-            SceneEditorPath.Text = sceneEditorPath;
+            SceneEditorPath.Text = "Path: " + sceneEditorPath;
         }
 
         public void HomeButtonClick(object sender, RoutedEventArgs args)
@@ -72,7 +74,7 @@ namespace AssetBundlePatcher.Views
             this.HomeSection.IsVisible = false;
             this.SettingsViewer.IsVisible = false;
             this.SceneEditorPanel.IsVisible = true;
-            Console.WriteLine("Switched To Home");
+            Console.WriteLine("Switched To Scene Editor");
         }
 
         public void ConsoleButtonClick(object sender, RoutedEventArgs args)
