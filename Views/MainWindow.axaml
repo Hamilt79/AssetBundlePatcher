@@ -1,0 +1,185 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AssetBundlePatcher.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AssetBundlePatcher.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/Patcher.ico"
+        Title="AssetBundlePatcher">
+
+  <Panel>
+    
+    
+    
+    <Grid ColumnDefinitions="auto, 1*" RowDefinitions="95*, 5*">
+      
+      <Grid.Styles>
+        <Style Selector="Button:pointerover ContentPresenter">
+          <Setter Property="BorderBrush" Value="LightBlue" /> 
+        </Style>  
+      
+      </Grid.Styles>
+      
+      <!-- Menu -->
+      <StackPanel Grid.Column="0" Background="DimGray">
+        <StackPanel.Styles>
+          <Style Selector="Button ContentPresenter">
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Background" Value="Transparent" />
+          </Style>
+          <Style Selector="Button:pointerover ContentPresenter">
+            <Setter Property="BorderBrush" Value="LightBlue" />
+          </Style>
+        </StackPanel.Styles>
+         <Button HorizontalAlignment="Stretch" Click="HomeButtonClick">
+          <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Home</TextBlock>
+         </Button>
+         <Button HorizontalAlignment="Stretch" Click="SceneEditorButtonClick">
+          <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Scene Editor</TextBlock>
+         </Button>
+         <Button HorizontalAlignment="Stretch" Click="ConsoleButtonClick">
+          <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="">Console</TextBlock>
+         </Button>
+        <Button HorizontalAlignment="Stretch" Click="SettingsButtonClick">
+          <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="">Settings</TextBlock>
+        </Button>
+      </StackPanel>
+
+      <!-- Home Section -->
+      <Panel Grid.Column="1" HorizontalAlignment="Stretch" Name="HomeSection" IsVisible="True" Background="DarkGray">
+        <DockPanel HorizontalAlignment="Stretch">
+          <StackPanel HorizontalAlignment="Center">
+            <StackPanel.Styles>
+              <Style Selector="TextBlock">
+                <Setter Property="Foreground" Value="Black" />
+              </Style>
+              <Style Selector="Button">
+                <Setter Property="Foreground" Value="Black" />
+              </Style>
+            </StackPanel.Styles>
+            <TextBlock HorizontalAlignment="Center" Name="OptionsText" FontSize="20">Options:</TextBlock>
+            <DockPanel Name="CustomWorldIDDockPanel" IsVisible="False">
+              <TextBlock VerticalAlignment="Center">World ID: </TextBlock>
+              <ThemeVariantScope RequestedThemeVariant="Light">
+                <TextBox Foreground="Black" Background="White" Name="CustomWorldIdTextBox"></TextBox>
+              </ThemeVariantScope>
+            </DockPanel>
+            <Button HorizontalAlignment="Center" Click="SelectBundleClick">
+              <TextBlock HorizontalAlignment="Center">Select Bundle</TextBlock>
+            </Button>
+          </StackPanel>
+        </DockPanel>
+      </Panel>
+
+
+      <!-- Scene Editor -->
+
+      <Panel IsVisible="False" Name="SceneEditorPanel" Grid.Column="1" Background="DarkSlateGray">
+        <Grid RowDefinitions="auto, 2, 1*">
+          <DockPanel Grid.Row="0">
+            <TextBlock Margin="5 0 10 0" Foreground="Black" Name="SceneEditorPath" VerticalAlignment="Center">Path:</TextBlock>
+            <ThemeVariantScope RequestedThemeVariant="Light" HorizontalAlignment="Stretch">
+              <!--<TextBox Name="SceneEditorWorldID"></TextBox>-->
+            </ThemeVariantScope>
+            <DockPanel HorizontalAlignment="Right">
+              <Button Click="SceneEditorStartClick">Start</Button>
+              <Button Click="SceneEditorResetClick">Reset</Button>
+              <Button Click="SceneEditorSaveClick">Save</Button>
+            </DockPanel>
+
+          </DockPanel>
+          <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" />
+          <Panel Grid.Row="2">
+            <Grid ColumnDefinitions="*, auto, *">
+              <TreeView SelectionMode="Multiple" SelectedItem="{Binding SelectedItem}" Grid.Column="0" ItemsSource="{Binding Nodes}">
+                <TreeView.Styles>
+                  <Style Selector="TreeViewItem">
+                    <Setter Property="MinHeight" Value="1" />
+                    <Setter Property="IsExpanded" Value="{Binding (vm:Node).IsExpanded}" />
+                  </Style>
+                </TreeView.Styles>
+                <TreeView.ItemTemplate>
+                  <TreeDataTemplate DataType="vm:Node" ItemsSource="{Binding SubNodes}">
+                    <DockPanel>
+                      <TextBlock FontSize="15" VerticalAlignment="Center" Text="{Binding Title}"/>
+                      <SelectableTextBlock Foreground="DarkRed" Margin="0 0 10 0" FontSize="15" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding PathID}" />
+                    </DockPanel>
+                  </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+                
+              </TreeView>
+              
+              <GridSplitter Width="1" Grid.Column="1" Background="Black" />
+              
+              <TreeView SelectionMode="Multiple" Grid.Column="2" ItemsSource="{Binding InfoNodes}">
+                <TreeView.Styles>
+                  <Style Selector="TreeViewItem">
+                    <Setter Property="MinHeight" Value="1" />
+                    <Setter Property="BorderBrush" Value="Black" />
+                    <Setter Property="BorderThickness" Value="0 0 0 2" />
+                    <Setter Property="IsExpanded" Value="{Binding (vm:InfoNode).IsExpanded}" />
+                  </Style>
+                </TreeView.Styles>
+                <TreeView.ItemTemplate>
+                  <TreeDataTemplate ItemsSource="{Binding SubNodes}">
+                    <DockPanel>
+                      <Button Command="{Binding DebugButtonClick}" IsVisible="{Binding DebugButton}">B</Button>
+                      <TextBlock Margin="0 0 10 0" Foreground="LightGreen" FontSize="15" VerticalAlignment="Center" Text="{Binding Type}"/>
+                      <CheckBox IsChecked="{Binding IsChecked}" IsVisible="{Binding ShowCheckbox}"></CheckBox>
+                      <SelectableTextBlock IsVisible="{Binding IsPropNameVisible}" Foreground="White" FontSize="15" VerticalAlignment="Center" Text="{Binding PropName}"/>
+                      <ThemeVariantScope RequestedThemeVariant="Light">
+                        <TextBox Foreground="Red" Padding="5 0 5 0" VerticalAlignment="Center" TextWrapping="Wrap" IsVisible="{Binding ValueVisible}" Text="{Binding Value}" MinHeight="1" Background="Transparent"></TextBox>
+                      </ThemeVariantScope>
+                    </DockPanel>
+                  </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+              </TreeView>
+            </Grid>
+          </Panel>
+        </Grid>
+      </Panel>
+
+      <!-- Console View -->
+      <ScrollViewer Name="ConsoleScrollViewer" Grid.Column="1" IsVisible="False">
+        <SelectableTextBlock Name="ConsoleTextBlock" Background="Black" TextWrapping="Wrap" Foreground="White" PropertyChanged="OnConsoleTextChanged">
+        </SelectableTextBlock>
+      </ScrollViewer>
+
+      <!-- Settings View -->
+      <Panel Background="DarkGray" Grid.Column="1" Name="SettingsViewer" IsVisible="False">
+        <StackPanel>
+          <!--<Button Click="" Background="Gray" Foreground="Black" HorizontalAlignment="Stretch">Reindex Cache (Use this if you downloaded or joined a new world)</Button> -->
+          <TextBlock Margin="5 0 10 0" Foreground="Black" VerticalAlignment="Center">All settings have been removed due to application feature reduction</TextBlock>
+
+        </StackPanel>
+      </Panel>
+      
+      <!-- Blocking Panel -->
+      <Panel Name="BlockingPanel" Background="Beige" Grid.Column="1" IsVisible="False">
+        <DockPanel>
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Foreground="Black" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center">Loading Something Important xD</TextBlock>
+            <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center">So I can't let you touch buttons xD</TextBlock>
+            <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center">Prolly reindexing worlds, so uhhh yea</TextBlock>
+          </StackPanel>
+        </DockPanel>
+      </Panel>
+
+      <!-- Global Progress Bar -->
+      <Panel Grid.Row="1" Grid.ColumnSpan="2">
+        <ProgressBar Name="GlobalProgressBar" Foreground="Blue" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Value="0" />
+      </Panel>
+    </Grid>
+  </Panel>
+
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+
+
+
+</Window>
