@@ -12,7 +12,8 @@ It is very Barren because it was originally made as a tool to help me debug a sp
 
 # Reqs
 
-Include [AssetTools.NET](https://github.com/nesrak1/AssetsTools.NET) library as a dependency.
+Include [AssetTools.NET](https://github.com/nesrak1/AssetsTools.NET) library as a dependency.\
+Include [Avalonia UI](https://github.com/avaloniaui/avalonia) as package. (Version 11.0.6)
 
 # Image
 Apologies for the censor, but I did not want identifying factors in the image.
